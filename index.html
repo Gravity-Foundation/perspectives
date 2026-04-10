@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Future of Business Analytics - Gravity</title>
+<style>
+@font-face { font-family: "Aspekta"; src: url("https://www.bygravity.com/fonts/Aspekta-450.woff2") format("woff2"); font-weight: 450; font-display: swap; }
+@font-face { font-family: "Aspekta"; src: url("https://www.bygravity.com/fonts/Aspekta-500.woff2") format("woff2"); font-weight: 500; font-display: swap; }
+@font-face { font-family: "Aspekta"; src: url("https://www.bygravity.com/fonts/Aspekta-550.woff2") format("woff2"); font-weight: 550; font-display: swap; }
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-dark: #101113;
+  --bg-dark-alt: #202327;
+  --bg-card-dark: #282a2e;
+  --bg-light: #ffffff;
+  --bg-off-white: #f5f5f5;
+  --text-dp: #fafafa;
+  --text-ds: #a3a3a3;
+  --text-lp: rgba(16,17,19,0.9);
+  --text-ls: rgba(16,17,19,0.5);
+  --text-m: #737373;
+  --teal: #3cc5d2;
+  --teal-dark: #17939e;
+  --orange: #ff890b;
+  --purple: #d073fa;
+  --cyan: #52fff6;
+  --border-l: #e5e5e5;
+  --border-d: #262626;
+  --r: 12px;
+  --font: "Aspekta", "Inter", "Helvetica Neue", Arial, sans-serif;
+}
+
+html, body { height: 100%; font-family: var(--font); font-weight: 450; -webkit-font-smoothing: antialiased; overflow: hidden; background: var(--bg-dark); }
+
+/* --- Progress --- */
+.progress { position: fixed; top: 0; left: 0; height: 3px; background: var(--teal); transition: width 0.4s cubic-bezier(0.4,0,0.2,1); z-index: 1000; }
+
+/* --- Slides --- */
+.slides { width: 100%; height: 100%; position: relative; }
+
+.slide {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  padding: clamp(32px, 5vw, 80px);
+  opacity: 0; pointer-events: none;
+  overflow-y: auto;
+}
+.slide.active { opacity: 1; pointer-events: auto; }
+
+.slide-dark { background: var(--bg-dark); color: var(--text-dp); }
+.slide-light { background: var(--bg-light); color: var(--text-lp); }
+.slide-off-white { background: var(--bg-off-white); color: var(--text-lp); }
+
+/* --- Header --- */
+.slide-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: clamp(24px, 4vw, 48px); flex-shrink: 0; }
+.slide-logo { height: 28px; width: auto; }
+.header-label { font-size: 13px; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; }
+.header-label-dark { color: var(--text-ds); }
+.header-label-light { color: var(--text-ls); }
+
+/* --- Content area --- */
+.slide-content { flex: 1; display: flex; flex-direction: column; justify-content: center; max-width: 1100px; }
+.slide-content.centered { align-items: center; text-align: center; margin: 0 auto; }
+
+/* --- Footer --- */
+.slide-footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 16px; flex-shrink: 0; font-size: 12px; color: var(--text-m); }
+
+/* --- Typography --- */
+.hero-title { font-size: clamp(36px, 5vw, 64px); font-weight: 550; letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 24px; }
+.section-title { font-size: clamp(28px, 3.5vw, 48px); font-weight: 550; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 20px; }
+.slide-heading { font-size: clamp(22px, 2.5vw, 36px); font-weight: 550; letter-spacing: -0.01em; line-height: 1.2; margin-bottom: 16px; }
+.subheading { font-size: clamp(18px, 1.5vw, 24px); font-weight: 500; letter-spacing: -0.01em; line-height: 1.3; margin-bottom: 12px; }
+.body-text { font-size: clamp(16px, 1.1vw, 20px); font-weight: 450; line-height: 1.65; }
+.caption { font-size: clamp(13px, 0.9vw, 15px); font-weight: 450; line-height: 1.5; }
+
+.accent { color: var(--teal); }
+.accent-dark { color: var(--teal-dark); }
+.text-ds { color: var(--text-ds); }
+.text-ls { color: var(--text-ls); }
+
+.divider-dark { width: 120px; height: 1px; background: #404040; margin: 24px 0; }
+.divider-light { width: 120px; height: 1px; background: var(--border-l); margin: 24px 0; }
+
+/* --- Bullet lists --- */
+.slide ul { list-style: none; padding: 0; }
+.slide ul li { padding-left: 24px; position: relative; margin-bottom: 14px; font-size: clamp(16px, 1.1vw, 20px); line-height: 1.6; }
+.slide ul li::before { content: ""; position: absolute; left: 0; top: 11px; width: 8px; height: 8px; border-radius: 8px; }
+.slide-dark ul li::before { background: var(--teal); }
+.slide-light ul li::before, .slide-off-white ul li::before { background: var(--teal-dark); }
+
+/* --- Role chooser cards --- */
+.chooser-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-top: 32px;
+  max-width: 900px;
+}
+
+.chooser-card {
+  border-radius: var(--r);
+  padding: 32px;
+  cursor: pointer;
+  transition: transform 0.25s, box-shadow 0.25s;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-decoration: none;
+  position: relative;
+}
+
+.chooser-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+}
+
+.chooser-card-title {
+  font-size: clamp(18px, 1.3vw, 22px);
+  font-weight: 550;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+.chooser-card-desc {
+  font-size: clamp(14px, 0.9vw, 16px);
+  font-weight: 450;
+  line-height: 1.5;
+  opacity: 0.7;
+}
+
+.chooser-card-arrow {
+  position: absolute;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
+  opacity: 0;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.chooser-card:hover .chooser-card-arrow {
+  opacity: 0.5;
+  transform: translateY(-50%) translateX(4px);
+}
+
+.card-exec { background: #deeef2; color: #144c66; }
+.card-biz { background: #def2f1; color: #17242a; }
+.card-analyst { background: #f2e9de; color: #a55f30; }
+.card-data { background: #f2dee9; color: #8a2caf; }
+
+/* --- Two column layout --- */
+.two-col { display: flex; gap: clamp(24px, 3vw, 48px); align-items: flex-start; }
+.two-col > * { flex: 1; }
+
+/* --- Content cards --- */
+.content-card {
+  background: var(--bg-card-dark);
+  border-radius: var(--r);
+  padding: clamp(20px, 2vw, 32px);
+  margin-bottom: 16px;
+}
+
+.content-card-light {
+  background: var(--bg-light);
+  border: 1px solid var(--border-l);
+  border-radius: var(--r);
+  padding: clamp(20px, 2vw, 32px);
+  margin-bottom: 16px;
+}
+
+.card-number {
+  font-size: clamp(32px, 3vw, 52px);
+  font-weight: 550;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+/* --- FAQ / Objection expanders --- */
+.faq-list { display: flex; flex-direction: column; gap: 12px; margin-top: 24px; max-width: 900px; }
+
+.faq-item {
+  border-radius: var(--r);
+  padding: clamp(18px, 1.5vw, 24px);
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.faq-item-dark { background: var(--bg-card-dark); border: 1px solid var(--border-d); }
+.faq-item-dark:hover { border-color: var(--teal); }
+.faq-item-light { background: var(--bg-light); border: 1px solid var(--border-l); }
+.faq-item-light:hover { border-color: var(--teal-dark); }
+
+.faq-q {
+  font-size: clamp(15px, 1.1vw, 18px);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  line-height: 1.4;
+}
+
+.faq-toggle {
+  font-size: 18px;
+  flex-shrink: 0;
+  transition: transform 0.3s;
+  opacity: 0.4;
+}
+
+.faq-item.open .faq-toggle { transform: rotate(45deg); }
+
+.faq-a {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1), padding-top 0.3s;
+  font-size: clamp(14px, 0.95vw, 17px);
+  line-height: 1.65;
+  padding-top: 0;
+}
+
+.faq-item.open .faq-a { max-height: 400px; padding-top: 14px; }
+
+.faq-a-dark { color: var(--text-ds); }
+.faq-a-light { color: var(--text-ls); }
+
+/* --- Stats row --- */
+.stats-row {
+  display: flex;
+  gap: 20px;
+  margin-top: 28px;
+}
+
+.stat-card {
+  flex: 1;
+  background: var(--bg-card-dark);
+  border-radius: var(--r);
+  padding: clamp(20px, 2vw, 32px);
+  text-align: center;
+}
+
+.stat-number {
+  font-size: clamp(28px, 3vw, 48px);
+  font-weight: 550;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: clamp(12px, 0.85vw, 15px);
+  font-weight: 450;
+  color: var(--text-ds);
+  margin-top: 10px;
+}
+
+/* --- CTA block --- */
+.cta-subtitle {
+  font-size: clamp(16px, 1.2vw, 20px);
+  line-height: 1.6;
+  color: var(--text-ds);
+  max-width: 700px;
+  margin-bottom: 32px;
+}
+
+.cta-contact {
+  font-size: clamp(15px, 1vw, 18px);
+  color: var(--text-ds);
+}
+
+.cta-contact a { color: var(--teal); text-decoration: none; }
+.cta-contact a:hover { text-decoration: underline; }
+
+/* --- Nav bar --- */
+.nav {
+  position: fixed;
+  bottom: clamp(16px, 2vw, 32px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  z-index: 100;
+  background: rgba(32, 35, 39, 0.9);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border-d);
+  border-radius: var(--r);
+  padding: 8px 16px;
+}
+
+.nav-btn {
+  background: none;
+  border: 1px solid var(--border-d);
+  color: var(--text-ds);
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  font-size: 16px;
+  font-family: var(--font);
+}
+
+.nav-btn:hover { background: rgba(60,197,210,0.1); border-color: var(--teal); color: var(--text-dp); }
+.nav-btn:disabled { opacity: 0.25; cursor: default; }
+.nav-btn:disabled:hover { background: none; border-color: var(--border-d); color: var(--text-ds); }
+
+.nav-counter { font-size: 13px; color: var(--text-m); min-width: 48px; text-align: center; font-variant-numeric: tabular-nums; }
+
+.nav-role {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 6px;
+  display: none;
+}
+
+.nav-role.visible { display: inline-block; }
+
+.nav-restart {
+  font-size: 12px;
+  color: var(--text-m);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: color 0.2s;
+  display: none;
+  border: none;
+  background: none;
+  font-family: var(--font);
+}
+
+.nav-restart.visible { display: inline-block; }
+.nav-restart:hover { color: var(--teal); }
+
+/* --- Animations --- */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+.slide.active .anim { animation: fadeUp 0.5s cubic-bezier(0.4,0,0.2,1) forwards; opacity: 0; }
+.slide.active .d1 { animation-delay: 0.08s; }
+.slide.active .d2 { animation-delay: 0.16s; }
+.slide.active .d3 { animation-delay: 0.24s; }
+.slide.active .d4 { animation-delay: 0.32s; }
+.slide.active .d5 { animation-delay: 0.40s; }
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .chooser-grid { grid-template-columns: 1fr; }
+  .two-col { flex-direction: column; }
+  .stats-row { flex-direction: column; }
+  .nav { padding: 6px 12px; gap: 10px; }
+}
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+
+<div class="slides" id="slides">
+
+<!-- ===== SLIDE 0: COVER ===== -->
+<div class="slide slide-dark active" data-slide="0">
+  <div class="slide-header">
+    <img class="slide-logo" src="https://lh3.googleusercontent.com/d/1w8nPDL9uReViWWpZ7-uU7YXbXFXS-kE9" alt="Gravity">
+  </div>
+  <div class="slide-content centered">
+    <p class="caption text-ds anim d1" style="letter-spacing:0.1em; text-transform:uppercase; margin-bottom:32px;">Gravity / Perspectives on Analytics</p>
+    <h1 class="hero-title anim d2">Your Data. Your Analyst.<br><span class="accent">Built to Hunt.</span></h1>
+    <p class="body-text text-ds anim d3" style="max-width:640px; margin-top:8px;">A new model for who owns analytics, who does the work, and how AI changes everything. Choose your role and explore what this means for you.</p>
+  </div>
+  <div class="slide-footer">
+    <span>bygravity.com</span>
+    <span></span>
+  </div>
+</div>
+
+<!-- ===== SLIDE 1: ROLE CHOOSER ===== -->
+<div class="slide slide-dark" data-slide="1">
+  <div class="slide-header">
+    <img class="slide-logo" src="https://lh3.googleusercontent.com/d/1w8nPDL9uReViWWpZ7-uU7YXbXFXS-kE9" alt="Gravity">
+  </div>
+  <div class="slide-content">
+    <p class="caption accent anim d1" style="letter-spacing:0.1em; text-transform:uppercase; margin-bottom:16px;">Choose Your Perspective</p>
+    <h2 class="section-title anim d2">What best describes your role?</h2>
+    <div class="chooser-grid anim d3">
+      <div class="chooser-card card-exec" onclick="choosePath('executive')">
+        <div class="chooser-card-title">CEO or Executive</div>
+        <div class="chooser-card-desc">I want to understand why analytics feels so slow and how to restructure for speed.</div>
+        <div class="chooser-card-arrow">&rarr;</div>
+      </div>
+      <div class="chooser-card card-biz" onclick="choosePath('business')">
+        <div class="chooser-card-title">Business Function Leader</div>
+        <div class="chooser-card-desc">I'm waiting too long for data my team needs to make decisions.</div>
+        <div class="chooser-card-arrow">&rarr;</div>
+      </div>
+      <div class="chooser-card card-analyst" onclick="choosePath('analyst')">
+        <div class="chooser-card-title">Business Analyst</div>
+        <div class="chooser-card-desc">I want to spend more time on insights and less time waiting for data access.</div>
+        <div class="chooser-card-arrow">&rarr;</div>
+      </div>
+      <div class="chooser-card card-data" onclick="choosePath('data')">
+        <div class="chooser-card-title">Data or Analytics Leader</div>
+        <div class="chooser-card-desc">I want my team focused on high-value platform work, not the ad hoc request queue.</div>
+        <div class="chooser-card-arrow">&rarr;</div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span>bygravity.com</span>
+    <span></span>
+  </div>
+</div>
+
+<!-- ===== EXECUTIVE PATH ===== -->
+
+<!-- Exec: Problem -->
+<div class="slide slide-light" data-slide="2">
+  <div class="slide-header">
+    <img class="slide-logo" src="https://lh3.googleusercontent.com/d/1etcDHzJB_5k4Lt0M2WoD54Ce7qdhduYk" alt="Gravity">
+    <span class="header-label header-label-light">The Challenge</span>
+  </div>
+  <div class="slide-content">
+    <h2 class="section-title anim d1">The current analytics model has a <span class="accent-dark">structural flaw.</span></h2>
+    <div class="two-col anim d2" style="margin-top: 24px;">
+      <div>
+        <p class="body-text" style="color: var(--text-ls);">You centralized analytical authority in a team that doesn't own business outcomes. The metrics that drive your company (revenue, pipeline, churn, retention) are business constructs. They belong to the functions accountable for them.</p>
+        <p class="body-text" style="color: var(--text-ls); margin-top: 16px;">Your data team is talented. But they're defining truth for a business they observe from a distance, without the authority to settle the disagreements that inevitably arise.</p>
+      </div>
+      <div>
+        <ul>
+          <li style="color: var(--text-lp);">Who presents the numbers at your leadership meeting? Not the data team. Revenue, pipeline, retention: those are owned by the people accountable for the outcomes.</li>
+          <li style="color: var(--text-lp);">When two teams use different churn numbers, who decides? Not the data team. They pick a definition and hope everyone complies.</li>
+          <li style="color: var(--text-lp);">The result: competing numbers, slow turnaround, and decisions made from spreadsheets at midnight.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span>bygravity.com</span>
+    <span></span>
+  </div>
+</div>
+
+<!-- Exec: Solution -->
+<div class="slide slide-dark" data-slide="3">
+  <div class="slide-header">
+    <img class="slide-logo" src="https://lh3.googleusercontent.com/d/1w8nPDL9uReViWWpZ7-uU7YXbXFXS-kE9" alt="Gravity">
+    <span class="header-label header-label-dark">The New Model</span>
+  </div>
+  <div class="slide-content">
+    <h2 class="section-title anim d1">Three functions. <span class="accent">Three owners.</span></h2>
+    <p class="body-text text-ds anim d2" style="max-width: 700px; margin-bottom: 28px;">The work called "data team" is actually three different functions that belong in three different places.</p>
+    <div class="stats-row anim d3">
+      <div class="stat-card">
+        <p class="stat-number accent">IT</p>
+        <p class="stat-label" style="margin-top: 14px;">Data Platform &amp; Infrastructure</p>
+        <p class="caption text-ds" style="margin-top: 10px;">Warehousing, pipelines, data quality, access controls. Real engineering. Centralize it.</p>
+      </div>
+      <div class="stat-card">
+        <p class="stat-number" style="color: var(--orange);">Business</p>
+        <p class="stat-label" style="margin-top: 14px;">Analytical Execution</p>
+        <p class="caption text-ds" style="margin-top: 10px;">Metrics, analysis, insights. Embed it in each function. AI makes this possible at scale.</p>
+      </div>
+      <div class="stat-card">
+        <p class="stat-number" style="color: var(--purple);">Finance</p>
+        <p class="stat-label" style="margin-top: 14px;">Metric Governance</p>
+        <p class="caption text-ds" style="margin-top: 10px;">When teams disagree on definitions, someone with authority decides. That's finance or ops leadership.</p>
+      </div>
+    </div>
+    <div class="content-card anim d4" style="margin-top: 24px;">
+      <p class="subheading" style="color: var(--text-dp);">How AI changes the game</p>
+      <p class="body-text text-ds" style="margin-top: 8px;">When two teams derive the same metric differently, AI can explain exactly how each version was calculated from the source records, surface the assumptions behind each approach, and help stakeholders resolve the difference in real time. This is what semantic layers promised but could never deliver, because they required a team to maintain them manually.</p>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span>bygravity.com</span>
+    <span></span>
+  </div>
+</div>
+
+<!-- Exec: FAQ -->
+<div class="slide slide-off-white" data-slide="4">
+  <div class="slide-header">
+    <img class="slide-logo" src="https://lh3.googleusercontent.com/d/1etcDHzJB_5k4Lt0M2WoD54Ce7qdhduYk" alt="Gravity">
+    <span class="header-label header-label-light">Your Questions</span>
+  </div>
+  <div class="slide-content">
+    <h2 class="section-title anim d1">Common <span class="accent-dark">concerns.</span></h2>
+    <div class="faq-list anim d2">
+      <div class="faq-item faq-item-light" onclick="this.classList.toggle('open')">
+        <div class="faq-q" style="color: var(--text-lp);">"We tried self-service analytics before. It was chaos."<span class="faq-toggle">+</span></div>
+        <div class="faq-a faq-a-light">Self-service in 2020 meant handing people a BI tool and hoping for the best. Purpose-built AI is fundamentally different. It accumulates knowledge, enforces consistency through understanding, and gets smarter about your business every day. It's not a tool you hand someone. It's an analyst that works for them.</div>
+      </div>
+      <div class="faq-item faq-item-light" onclick="this.classList.toggle('open')">
+        <div class="faq-q" style="color: var(--text-lp);">"Our data team says we still need them."<span class="faq-toggle">+</span></div>
+        <div class="faq-a faq-a-light">They're right, for infrastructure. Warehousing, pipelines, data quality, security. That work is essential and requires real engineering skill. What changes is who owns metric definitions and analytical execution. Those belong with the business functions accountable for the outcomes.</div>
+      </div>
+      <div class="faq-item faq-item-light" onclick="this.classList.toggle('open')">
+        <div class="faq-q" style="color: var(--text-lp);">"How is this different from ChatGPT?"<span class="faq-toggle">+</span></div>
+        <div class="faq-a faq-a-light">ChatGPT forgets everything when you close the tab. Orion remembers your business: your definitions, your logic, your priorities. It connects to your actual data infrastructure and works autonomously. Think of the difference as a consultant you brief from scratch each time versus an analyst who works for you permanently.</div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span>bygravity.com</span>
+    <span></span>
+  </div>
+</div>
+
+<!-- ===== BUSINESS LEADER PATH ===== -->
+
+<!-- Biz: Problem -->
+<div class="slide slide-light" data-slide="5">
+  <div class="slide-header">
+    <img class="slide-logo" src="https://lh3.googleusercontent.com/d/1etcDHzJB_5k4Lt0M2WoD54Ce7qdhduYk" alt="Gravity">
+    <span class="header-label header-label-light">The Challenge</span>
+  </div>
+  <div class="slide-content">
+    <h2 class="section-title anim d1">Every question is a ticket. Every ticket is a <span class="accent-dark">sprint.</span></h2>
+    <div class="two-col anim d2" style="margin-top: 24px;">
+      <div>
+        <p class="body-text" style="color: var(--text-ls);">You need to understand why pipeline is down. You file a request with the data team. A week later, someone asks clarifying questions. Another week. You get a dashboard. The filters are wrong and it measures monthly instead of weekly. You send it back.</p>
+        <p class="body-text" style="color: var(--text-ls); margin-top: 16px;">By the time you get what you actually need, the board meeting is over and you've already made the decision with a spreadsheet you built at midnight.</p>
+      </div>
+      <div>
+        <p class="body-text" style="color: var(--text-ls);">This isn't anyone's fault. The data team is busy. They have a backlog. They're supporting six other functions. And they don't sit in your meetings, so they don't have the context to get it right the first time.</p>
+        <p class="body-text" style="color: var(--text-ls); margin-top: 16px;">It's an organizational design problem, not a people problem. And there's now a better way to solve it.</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span>bygravity.com</span>
+    <span></span>
+  </div>
+</div>
+
+<!-- Biz: Solution -->
+<div class="slide slide-dark" data-slide="6">
+  <div class="slide-header">
+    <img class="slide-logo" src="https://lh3.googleusercontent.com/d/1w8nPDL9uReViWWpZ7-uU7YXbXFXS-kE9" alt="Gravity">
+    <span class="header-label header-label-dark">The New Way</span>
+  </div>
+  <div class="slide-content">
+    <h2 class="section-title anim d1">What if you had an analyst who already <span class="accent">understood your business?</span></h2>
+    <p class="body-text text-ds anim d2" style="max-width: 700px; margin-bottom: 28px;">Not a tool you have to learn. An analyst that learns you.</p>
+    <div class="two-col anim d3">
+      <div>
+        <ul>
+          <li style="color: var(--text-dp);">Tell it what you need in plain English. It writes the SQL, builds the analysis, and delivers the answer.</li>
+          <li style="color: var(--text-dp);">It remembers every conversation, every definition, every correction. Gets smarter about your business every day.</li>
+          <li style="color: var(--text-dp);">Need a Slack summary every Monday? A metric alert? A slide for leadership? Done.</li>
+        </ul>
+      </div>
+      <div>
+        <div class="stat-card" style="margin-bottom: 16px;">
+          <p class="stat-number" style="color: var(--cyan);">30 min</p>
+          <p class="stat-label">From question to answer with Orion</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-number" style="color: var(--orange);">3 weeks</p>
+          <p class="stat-label">The typical data team sprint cycle</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span>bygravity.com</span>
+    <span></span>
+  </div>
+</div>
+
+<!-- Biz: FAQ -->
+<div class="slide slide-off-white" data-slide="7">
+  <div class="slide-header">
+    <img class="slide-logo" src="https://lh3.googleusercontent.com/d/1etcDHzJB_5k4Lt0M2WoD54Ce7qdhduYk" alt="Gravity">
+    <span class="header-label header-label-light">Your Questions</span>
+  </div>
+  <div class="slide-content">
+    <h2 class="section-title anim d1">Common <span class="accent-dark">concerns.</span></h2>
+    <div class="faq-list anim d2">
+      <div class="faq-item faq-item-light" onclick="this.classList.toggle('open')">
+        <div class="faq-q" style="color: var(--text-lp);">"Can I trust the numbers?"<span class="faq-toggle">+</span></div>
+        <div class="faq-a faq-a-light">Orion works from the same source data your data team uses. The difference is that it also understands your business context, because you taught it. Every definition and derivation is captured in a knowledge base you can review and share with your team.</div>
+      </div>
+      <div class="faq-item faq-item-light" onclick="this.classList.toggle('open')">
+        <div class="faq-q" style="color: var(--text-lp);">"My data team won't like this."<span class="faq-toggle">+</span></div>
+        <div class="faq-a faq-a-light">Most data teams spend roughly 70% of their time on ad hoc requests from business users. Orion handles those, freeing the data team to focus on the platform and infrastructure work that actually scales. They get to do the engineering they were hired for.</div>
+      </div>
+      <div class="faq-item faq-item-light" onclick="this.classList.toggle('open')">
+        <div class="faq-q" style="color: var(--text-lp);">"What about governance and consistency?"<span class="faq-toggle">+</span></div>
+        <div class="faq-a faq-a-light">Orion builds a knowledge base as you use it. Every metric definition, business rule, and assumption is captured and visible. When two teams define the same metric differently, Orion surfaces the divergence and helps stakeholders resolve it. That's more effective governance than most centralized systems provide in practice.</div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span>bygravity.com</span>
+    <span></span>
+  </div>
+</div>
+
+<!-- ===== ANALYST PATH ===== -->
+
+<!-- Analyst: Problem -->
+<div class="slide slide-light" data-slide="8">
+  <div class="slide-header">
+    <img class="slide-logo" src="https://lh3.googleusercontent.com/d/1etcDHzJB_5k4Lt0M2WoD54Ce7qdhduYk" alt="Gravity">
+    <span class="header-label header-label-light">The Challenge</span>
+  </div>
+  <div class="slide-content">
+    <h2 class="section-title anim d1">You know what to ask. You just can't <span class="accent-dark">get to the data.</span></h2>
+    <div class="two-col anim d2" style="margin-top: 24px;">
+      <div>
+        <p class="body-text" style="color: var(--text-ls);">You have the business context. You have the instincts. You know what questions would unlock real insight for your team.</p>
+        <p class="body-text" style="color: var(--text-ls); margin-top: 16px;">But getting to the data means waiting for someone else to model a table, write a query, or build a dashboard. By the time it arrives, the question has evolved and the cycle starts over.</p>
+      </div>
+      <div>
+        <div class="content-card-light">
+          <p class="subheading" style="color: var(--text-lp);">The current ratio</p>
+          <div style="display:flex; gap: 20px; margin-top: 16px;">
+            <div style="flex:1; text-align:center;">
+              <p class="card-number" style="color: var(--orange);">80%</p>
+              <p class="caption" style="color: var(--text-ls); margin-top: 6px;">Finding and cleaning data</p>
+            </div>
+            <div style="flex:1; text-align:center;">
+              <p class="card-number accent-dark">20%</p>
+              <p class="caption" style="color: var(--text-ls); margin-top: 6px;">Actual analysis and insight</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span>bygravity.com</span>
+    <span></span>
+  </div>
+</div>
+
+<!-- Analyst: Solution -->
+<div class="slide slide-dark" data-slide="9">
+  <div class="slide-header">
+    <img class="slide-logo" src="https://lh3.googleusercontent.com/d/1w8nPDL9uReViWWpZ7-uU7YXbXFXS-kE9" alt="Gravity">
+    <span class="header-label header-label-dark">The Flip</span>
+  </div>
+  <div class="slide-content">
+    <h2 class="section-title anim d1">Spend 80% on analysis. <span class="accent">20% on setup.</span></h2>
+    <p class="body-text text-ds anim d2" style="max-width: 700px; margin-bottom: 28px;">Orion connects to your company's data warehouse and handles the plumbing so you can focus on the insight.</p>
+    <div class="two-col anim d3">
+      <div>
+        <ul>
+          <li style="color: var(--text-dp);">Ask questions in plain English. Get answers with context, narrative, and formats you can take straight to leadership.</li>
+          <li style="color: var(--text-dp);">Need a presentation slide? Built. Need a weekly summary in Slack? Done. Need to track a metric over time? It watches and alerts you.</li>
+          <li style="color: var(--text-dp);">Every correction you make teaches Orion your business. It gets more accurate over time, not less.</li>
+        </ul>
+      </div>
+      <div>
+        <div class="content-card">
+          <p class="subheading" style="color: var(--text-dp);">The new ratio</p>
+          <div style="display:flex; gap: 20px; margin-top: 16px;">
+            <div style="flex:1; text-align:center;">
+              <p class="card-number accent">80%</p>
+              <p class="caption text-ds" style="margin-top: 6px;">Analysis and insight</p>
+            </div>
+            <div style="flex:1; text-align:center;">
+              <p class="card-number" style="color: var(--text-m);">20%</p>
+              <p class="caption text-ds" style="margin-top: 6px;">Setup and data access</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span>bygravity.com</span>
+    <span></span>
+  </div>
+</div>
+
+<!-- Analyst: FAQ -->
+<div class="slide slide-off-white" data-slide="10">
+  <div class="slide-header">
+    <img class="slide-logo" src="https://lh3.googleusercontent.com/d/1etcDHzJB_5k4Lt0M2WoD54Ce7qdhduYk" alt="Gravity">
+    <span class="header-label header-label-light">Your Questions</span>
+  </div>
+  <div class="slide-content">
+    <h2 class="section-title anim d1">Common <span class="accent-dark">concerns.</span></h2>
+    <div class="faq-list anim d2">
+      <div class="faq-item faq-item-light" onclick="this.classList.toggle('open')">
+        <div class="faq-q" style="color: var(--text-lp);">"Can I trust AI with data analysis?"<span class="faq-toggle">+</span></div>
+        <div class="faq-a faq-a-light">Orion shows its work. You can see the SQL it wrote and the logic behind every calculation. Because it builds knowledge over time, its accuracy improves the more you use it. Think of it as an analyst that gets better with every piece of feedback you give.</div>
+      </div>
+      <div class="faq-item faq-item-light" onclick="this.classList.toggle('open')">
+        <div class="faq-q" style="color: var(--text-lp);">"What if it gets the numbers wrong?"<span class="faq-toggle">+</span></div>
+        <div class="faq-a faq-a-light">Orion writes real SQL against real tables. When something looks off, you can ask it to explain its reasoning step by step. Over time, your corrections become part of its knowledge base, so the same issue doesn't happen twice. Accuracy is a function of usage.</div>
+      </div>
+      <div class="faq-item faq-item-light" onclick="this.classList.toggle('open')">
+        <div class="faq-q" style="color: var(--text-lp);">"Do I need to know SQL?"<span class="faq-toggle">+</span></div>
+        <div class="faq-a faq-a-light">No. Orion handles the SQL for you. You describe what you need in plain English, and Orion translates that into the right queries. If you do know SQL, you can review and refine what it writes. Either way, the output is transparent.</div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span>bygravity.com</span>
+    <span></span>
+  </div>
+</div>
+
+<!-- ===== DATA LEADER PATH ===== -->
+
+<!-- Data: Problem -->
+<div class="slide slide-light" data-slide="11">
+  <div class="slide-header">
+    <img class="slide-logo" src="https://lh3.googleusercontent.com/d/1etcDHzJB_5k4Lt0M2WoD54Ce7qdhduYk" alt="Gravity">
+    <span class="header-label header-label-light">The Challenge</span>
+  </div>
+  <div class="slide-content">
+    <h2 class="section-title anim d1">Your team is doing <span class="accent-dark">two jobs.</span> Only one is a good use of their skills.</h2>
+    <div class="two-col anim d2" style="margin-top: 24px;">
+      <div>
+        <div class="content-card-light" style="border-color: var(--teal-dark);">
+          <p class="subheading" style="color: var(--text-lp);">Job 1: Data Platform</p>
+          <p class="body-text" style="color: var(--text-ls); margin-top: 8px;">Warehousing, ingestion, data quality, access controls, reliability. This is where your team adds irreplaceable value. It requires real engineering skill and deep technical knowledge.</p>
+        </div>
+      </div>
+      <div>
+        <div class="content-card-light" style="border-color: var(--orange);">
+          <p class="subheading" style="color: var(--text-lp);">Job 2: Ad Hoc Request Queue</p>
+          <p class="body-text" style="color: var(--text-ls); margin-top: 8px;">A metric redefined. A dashboard updated. A table modeled for a use case that changes next quarter. This is where your team burns out. And the ratio is usually 70% this, 30% platform.</p>
+        </div>
+      </div>
+    </div>
+    <p class="body-text anim d3" style="color: var(--text-ls); margin-top: 24px; max-width: 700px;">Your team's best people didn't go into data engineering to maintain 200 dbt models that business users don't fully understand and request changes to every week. There's a better use of their talent.</p>
+  </div>
+  <div class="slide-footer">
+    <span>bygravity.com</span>
+    <span></span>
+  </div>
+</div>
+
+<!-- Data: Solution -->
+<div class="slide slide-dark" data-slide="12">
+  <div class="slide-header">
+    <img class="slide-logo" src="https://lh3.googleusercontent.com/d/1w8nPDL9uReViWWpZ7-uU7YXbXFXS-kE9" alt="Gravity">
+    <span class="header-label header-label-dark">The New Role</span>
+  </div>
+  <div class="slide-content">
+    <h2 class="section-title anim d1">The best data teams in 2026 are <span class="accent">platform teams.</span></h2>
+    <p class="body-text text-ds anim d2" style="max-width: 700px; margin-bottom: 28px;">AI handles the analytical execution layer. Your team focuses on what actually requires engineering skill.</p>
+    <div class="two-col anim d3">
+      <div>
+        <ul>
+          <li style="color: var(--text-dp);">Business users work with AI to define and derive their own metrics from the source data your team makes available.</li>
+          <li style="color: var(--text-dp);">Your team focuses on platform reliability, data quality, governance infrastructure, and enablement.</li>
+          <li style="color: var(--text-dp);">The knowledge base captures every definition and derivation, giving you more visibility into how data is being used across the org.</li>
+        </ul>
+      </div>
+      <div>
+        <div class="stat-card" style="margin-bottom: 16px;">
+          <p class="caption text-ds" style="margin-bottom: 8px;">Today</p>
+          <p class="stat-number" style="color: var(--orange);">70 / 30</p>
+          <p class="stat-label">Ad hoc requests vs. platform work</p>
+        </div>
+        <div class="stat-card">
+          <p class="caption text-ds" style="margin-bottom: 8px;">With Orion</p>
+          <p class="stat-number accent">30 / 70</p>
+          <p class="stat-label">Ad hoc vs. platform work</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span>bygravity.com</span>
+    <span></span>
+  </div>
+</div>
+
+<!-- Data: FAQ -->
+<div class="slide slide-off-white" data-slide="13">
+  <div class="slide-header">
+    <img class="slide-logo" src="https://lh3.googleusercontent.com/d/1etcDHzJB_5k4Lt0M2WoD54Ce7qdhduYk" alt="Gravity">
+    <span class="header-label header-label-light">Your Questions</span>
+  </div>
+  <div class="slide-content">
+    <h2 class="section-title anim d1">Common <span class="accent-dark">concerns.</span></h2>
+    <div class="faq-list anim d2">
+      <div class="faq-item faq-item-light" onclick="this.classList.toggle('open')">
+        <div class="faq-q" style="color: var(--text-lp);">"Business users will create metric chaos without central governance."<span class="faq-toggle">+</span></div>
+        <div class="faq-a faq-a-light">The reality is that ungoverned analysis already happens in spreadsheets you can't see. Orion actually improves visibility because every definition and derivation is captured in a shared knowledge base. You get a clearer picture of how data is used across the organization, not a murkier one.</div>
+      </div>
+      <div class="faq-item faq-item-light" onclick="this.classList.toggle('open')">
+        <div class="faq-q" style="color: var(--text-lp);">"AI generates unreliable numbers."<span class="faq-toggle">+</span></div>
+        <div class="faq-a faq-a-light">Orion queries your warehouse directly, using validated metric definitions that persist across every conversation. Every query is inspectable. Every result is traceable back to your source tables. Accuracy compounds over time as your team validates and refines.</div>
+      </div>
+      <div class="faq-item faq-item-light" onclick="this.classList.toggle('open')">
+        <div class="faq-q" style="color: var(--text-lp);">"Does this threaten my team's roles?"<span class="faq-toggle">+</span></div>
+        <div class="faq-a faq-a-light">Your team's most valuable work (platform reliability, data quality, governance infrastructure) is also the work most resilient to AI disruption. Moving from an ad hoc analytics service model to a platform engineering model is the strongest career path for your people. Orion accelerates that transition.</div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span>bygravity.com</span>
+    <span></span>
+  </div>
+</div>
+
+<!-- ===== CTA ===== -->
+<div class="slide slide-dark" data-slide="14">
+  <div class="slide-header">
+    <img class="slide-logo" src="https://lh3.googleusercontent.com/d/1w8nPDL9uReViWWpZ7-uU7YXbXFXS-kE9" alt="Gravity">
+  </div>
+  <div class="slide-content centered">
+    <h1 class="hero-title anim d1">See <span class="accent">Orion</span> in Action</h1>
+    <p class="cta-subtitle anim d2" id="ctaSubtitle">We'll walk you through a live demo using your data. No setup required. No commitment necessary.</p>
+    <div class="divider-dark anim d3"></div>
+    <p class="body-text text-ds anim d4" style="max-width: 680px; margin-bottom: 32px;">Gravity built Orion for exactly this moment. We bring deep services expertise from years leading data and services functions inside Google and Looker. We'll be with you until the outcomes are real.</p>
+    <p class="cta-contact anim d5"><a href="mailto:hello@bygravity.com">hello@bygravity.com</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;<a href="https://bygravity.com">bygravity.com</a></p>
+  </div>
+  <div class="slide-footer">
+    <span>bygravity.com</span>
+    <span></span>
+  </div>
+</div>
+
+</div><!-- /slides -->
+
+<!-- Nav -->
+<nav class="nav" id="nav">
+  <button class="nav-btn" id="prevBtn" onclick="navigate(-1)" disabled>&#8592;</button>
+  <span class="nav-role" id="navRole"></span>
+  <span class="nav-counter"><span id="navCurrent">1</span> / <span id="navTotal">2</span></span>
+  <button class="nav-btn" id="nextBtn" onclick="navigate(1)">&#8594;</button>
+  <button class="nav-restart" id="navRestart" onclick="restart()">Change role</button>
+</nav>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const progress = document.getElementById('progress');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const navCurrent = document.getElementById('navCurrent');
+const navTotal = document.getElementById('navTotal');
+const navRole = document.getElementById('navRole');
+const navRestart = document.getElementById('navRestart');
+const ctaSubtitle = document.getElementById('ctaSubtitle');
+
+const DURATION = 450;
+const EASE = 'cubic-bezier(0.4,0,0.2,1)';
+
+const pathSlides = {
+  executive: [2, 3, 4],
+  business:  [5, 6, 7],
+  analyst:   [8, 9, 10],
+  data:      [11, 12, 13]
+};
+
+const roleLabels = {
+  executive: { text: 'Executive', bg: '#deeef2', color: '#144c66' },
+  business:  { text: 'Business Leader', bg: '#def2f1', color: '#17242a' },
+  analyst:   { text: 'Analyst', bg: '#f2e9de', color: '#a55f30' },
+  data:      { text: 'Data Leader', bg: '#f2dee9', color: '#8a2caf' }
+};
+
+const ctaLines = {
+  executive: "See how your business functions can own their analytics with AI. We'll walk you through a live demo. No setup required.",
+  business:  "See how fast your team can move without the data team queue. We'll show you a live demo with your data. No setup required.",
+  analyst:   "See what it's like to have an analyst who already knows your data. We'll walk you through a live demo. No setup required.",
+  data:      "See how Orion frees your team to focus on platform and infrastructure. We'll show you a live demo with your data. No setup required."
+};
+
+let activePath = [0, 1];
+let pathPos = 0;
+let navigating = false;
+let chosenRole = null;
+
+function updateNav() {
+  navCurrent.textContent = pathPos + 1;
+  navTotal.textContent = activePath.length;
+  prevBtn.disabled = pathPos === 0;
+  // Disable next on chooser slide (must click a card) and on last slide
+  const currentSlideIndex = activePath[pathPos];
+  nextBtn.disabled = currentSlideIndex === 1 || pathPos === activePath.length - 1;
+  progress.style.width = ((pathPos + 1) / activePath.length * 100) + '%';
+
+  if (chosenRole) {
+    const label = roleLabels[chosenRole];
+    navRole.textContent = label.text;
+    navRole.style.background = label.bg;
+    navRole.style.color = label.color;
+    navRole.classList.add('visible');
+    navRestart.classList.add('visible');
+  } else {
+    navRole.classList.remove('visible');
+    navRestart.classList.remove('visible');
+  }
+}
+
+function transitionTo(fromIdx, toIdx, dir) {
+  const from = slides[fromIdx];
+  const to = slides[toIdx];
+
+  // Close any open FAQs on the slide we're leaving
+  from.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+
+  to.style.transition = 'none';
+  to.style.transform = dir > 0 ? 'translateX(70px)' : 'translateX(-70px)';
+  to.style.opacity = '0';
+  void to.offsetWidth;
+
+  from.style.transition = `opacity ${DURATION}ms ${EASE}, transform ${DURATION}ms ${EASE}`;
+  from.style.transform = dir > 0 ? 'translateX(-70px)' : 'translateX(70px)';
+  from.style.opacity = '0';
+  from.classList.remove('active');
+
+  to.style.transition = `opacity ${DURATION}ms ${EASE}, transform ${DURATION}ms ${EASE}`;
+  to.style.transform = 'translateX(0)';
+  to.style.opacity = '1';
+  to.classList.add('active');
+
+  setTimeout(() => {
+    from.style.transition = 'none';
+    from.style.transform = '';
+    from.style.opacity = '';
+    void from.offsetWidth;
+    from.style.transition = '';
+    to.style.transition = '';
+    to.style.transform = '';
+    to.style.opacity = '';
+    navigating = false;
+  }, DURATION + 50);
+}
+
+function navigate(dir) {
+  if (navigating) return;
+  const next = pathPos + dir;
+  if (next < 0 || next >= activePath.length) return;
+  // Block forward from chooser
+  if (activePath[pathPos] === 1 && dir > 0) return;
+  navigating = true;
+
+  const fromSlide = activePath[pathPos];
+  const toSlide = activePath[next];
+  pathPos = next;
+
+  // If going back to chooser, clear role
+  if (toSlide === 1) {
+    chosenRole = null;
+    activePath = [0, 1];
+    pathPos = 1;
+  }
+
+  transitionTo(fromSlide, toSlide, dir);
+  updateNav();
+}
+
+function choosePath(role) {
+  if (navigating) return;
+  navigating = true;
+  chosenRole = role;
+  activePath = [0, 1, ...pathSlides[role], 14];
+  pathPos = 2;
+
+  // Set CTA text
+  ctaSubtitle.textContent = ctaLines[role];
+
+  transitionTo(1, activePath[2], 1);
+  updateNav();
+}
+
+function restart() {
+  if (navigating) return;
+  navigating = true;
+  const fromSlide = activePath[pathPos];
+  chosenRole = null;
+  activePath = [0, 1];
+  pathPos = 1;
+
+  transitionTo(fromSlide, 1, -1);
+  updateNav();
+}
+
+// Keyboard
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); navigate(1); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); navigate(-1); }
+  if (e.key === 'Escape') { if (chosenRole) restart(); }
+});
+
+// Touch
+let touchX = 0;
+document.addEventListener('touchstart', e => { touchX = e.changedTouches[0].screenX; }, { passive: true });
+document.addEventListener('touchend', e => {
+  const diff = touchX - e.changedTouches[0].screenX;
+  if (Math.abs(diff) > 50) navigate(diff > 0 ? 1 : -1);
+}, { passive: true });
+
+// Click to advance (skip interactive elements)
+document.querySelector('.slides').addEventListener('click', e => {
+  if (e.target.closest('.chooser-card') || e.target.closest('.faq-item') || e.target.closest('button') || e.target.closest('a')) return;
+  const x = e.clientX / window.innerWidth;
+  navigate(x < 0.3 ? -1 : 1);
+});
+
+updateNav();
+</script>
+</body>
+</html>
